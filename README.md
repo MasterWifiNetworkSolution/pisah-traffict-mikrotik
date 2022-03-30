@@ -1,34 +1,43 @@
 # pisah-traffict-mikrotik-banyak-isp
 
-contoh gambaran saja
+# contoh gambaran saja
+
+# INTERFACE
 ![image](https://user-images.githubusercontent.com/46000841/160916019-ea6019d7-5057-4bbe-80c2-066a1cb84929.png)
 
+# ADDRESSES
 ![image](https://user-images.githubusercontent.com/46000841/160916160-077184c7-dea5-43dd-82fb-808205f97acc.png)
 
+# DHCP SERVER
 ![image](https://user-images.githubusercontent.com/46000841/160916251-9b995f9e-ac1f-4f34-a9ed-a6964e708159.png)
 
+# DNS
 ![image](https://user-images.githubusercontent.com/46000841/160916318-99e9dec1-2d04-41c1-af1d-ba4b1a4f69c3.png)
 
-![image](https://user-images.githubusercontent.com/46000841/160916373-61312d6b-760c-4249-8b14-02530a30267b.png)
-
+# NAT
 ![image](https://user-images.githubusercontent.com/46000841/160916434-7b1623dc-ae9e-4101-a7ac-1aca736b9df0.png)
 
+# MANGLE
 ![image](https://user-images.githubusercontent.com/46000841/160916478-a1ff87c0-7602-48ed-8aa9-c271a71d78bb.png)
 
 ![image](https://user-images.githubusercontent.com/46000841/160916526-5f415ba2-6eee-4478-b62d-c5a1c6570995.png)
 
 ![image](https://user-images.githubusercontent.com/46000841/160916588-49850f55-8117-4487-acf2-5c6378da8dcf.png)
 
+# RAW
 ![image](https://user-images.githubusercontent.com/46000841/160916641-1941ed40-9efb-41af-b6c4-9b30148681d8.png)
 
 ![image](https://user-images.githubusercontent.com/46000841/160916674-3034297e-712a-4303-aa8d-99e74d532df2.png)
 
 ![image](https://user-images.githubusercontent.com/46000841/160916815-4c459edc-edc5-4d5a-9ff9-58cc425a693a.png)
 
+# ADDRESS LISTS
 ![image](https://user-images.githubusercontent.com/46000841/160916867-5da3aafd-c5bb-4ad8-a205-d84fb4120647.png)
 
+# QUEUE SIMPLE
 ![image](https://user-images.githubusercontent.com/46000841/160916929-7df9a849-836b-4700-b868-218cbb125217.png)
 
+# QUEUE TYPE
 ![image](https://user-images.githubusercontent.com/46000841/160916969-7033f65a-d4d5-4bf9-854f-c0e61852b505.png)
 
 pisah trafik ini bisa di atur sesuai keinginan kalian mau berapa isp pun bisa.
