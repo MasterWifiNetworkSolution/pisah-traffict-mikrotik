@@ -1,5 +1,5 @@
 /ip dhcp-server
-add address-pool=hs-pool-HOTSPOT disabled=no interface="5.LAN" name=\
+add address-pool=hs-pool1 disabled=no interface="5.LAN" name=\
     dhcp1
 
 /ip dhcp-server network
