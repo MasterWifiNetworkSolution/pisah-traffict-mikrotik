@@ -1,7 +1,7 @@
 /ip address
-add address=20.20.20.1/24 interface="5.KONEKSI LAN" network=20.20.20.0
+add address=192.168.5.1/24 interface="5.KONEKSI LAN" network=192.168.5.0
 add address=192.168.1.10/24 comment="proses koneksi wan" interface=\
     1.ISP-1 network=192.168.1.0
-add address=192.168.2.10/24 interface=2.ISP-2 network=192.168.2.0
-add address=192.168.3.10/24 interface=3.ISP-3 network=192.168.3.0
-add address=192.168.8.10/24 interface=4.ISP-4 network=192.168.8.0
+add address=192.168.2.1/24 interface=2.ISP-2 network=192.168.2.0
+add address=192.168.3.1/24 interface=3.ISP-3 network=192.168.3.0
+add address=192.168.4.1/24 interface=4.ISP-4 network=192.168.4.0
