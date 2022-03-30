@@ -16,6 +16,20 @@ yaitu paket:
 3. GAMEMASTER
 4. STREAMMASTER
 
+cara download file via PC :
+1. Tekan CODE berwarna hijau
+2. Tekan Unduh ZIP
+3. Simpan di penyimpanan yang di inginkan
+
+cara download file via HP :
+1. Tekan titik 3 di pojok kanan atas
+2. Tekan CODE berwarna hijau
+3. Tekan Unduh ZIP
+4. Simpan di penyimpanan yang di inginkan
+
+cara edit file melalui PC dengan notepad++
+cara edit file melalui HP dengan anwritter apk
+
 jangan lupa Like, Komentar, SUBSCRIBE, aktifkan lonceng, dan share
 
 salam dari saya
