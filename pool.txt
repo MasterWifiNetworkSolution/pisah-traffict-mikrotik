@@ -1,4 +1,4 @@
 /ip pool
-add name=dhcp ranges=10.10.10.10-10.10.10.254
-add name=dhcp_pool2 ranges=20.20.20.2-20.20.20.254
-add name=rumahan ranges=30.30.30.0/24
+add name=dhcp ranges=192.168.10.2-192.168.10.254
+add name=dhcp_pool1 ranges=192.168.5.2-192.168.5.254
+add name=rumahan ranges=192.168.20.0/24
