@@ -3,37 +3,153 @@ add kind=pfifo name=master-upload pfifo-limit=150
 add kind=pfifo name=master-down pfifo-limit=150
 
 /queue simple
-add max-limit=50M/50M name="1.SEMUA TRAFIK MASTER" priority=3/3 queue=\
+add max-limit=50M/50M name="1.SEMUA TRAFIK MASTERWIFI" priority=3/3 queue=\
     pcq-upload-default/pcq-download-default target=\
-    192.168.10.0/24,20.20.20.0/24
+    192.168.5.0/24
 add max-limit=10M/10M name="6.TRAFICK SOSMED" packet-marks="FACEBOOK_DOWN,FACE\
     BOOK_UP,TWITTER DOWN,TWITTER UP,INSTAGRAM DOWN,INSTAGRAM UP,TIKTOK_DOWN,TI\
     KTOK_UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 queue=\
     pcq-upload-default/pcq-download-default target=\
-    10.10.10.0/24,20.20.20.0/24
+    192.168.5.0/24
 add max-limit=10M/10M name="7.TRAFICK STREAM" packet-marks=\
     "YOUTUBE DOWN,YOUTUBE UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 \
     queue=pcq-upload-default/pcq-download-default target=\
-    10.10.10.0/24,20.20.20.0/24
+    192.168.5.0/24
 add max-limit=10M/10M name="5.TRAFICK CHAT" packet-marks=\
     "WHATSAPP DOWN,WHATSAPP UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 \
     queue=pcq-upload-default/pcq-download-default target=\
-    10.10.10.0/24,20.20.20.0/24
+    192.168.5.0/24
 add name=CLIENT parent="1.SEMUA TRAFIK MASTER" priority=5/5 queue=\
-    default/default target=10.10.10.0/24,20.20.20.0/24
+    default/default target=192.168.5.0/24
+add name=A.LOKAL parent=CLIENT target=10.10.10.0/24
+add name=C.RUMAHAN parent=CLIENT target=30.30.30.0/24
+add name=B.HOTSPOT parent=CLIENT target=/queue type
+add kind=pfifo name=master-upload pfifo-limit=150
+add kind=pfifo name=master-down pfifo-limit=150
+
+/queue simple
+add max-limit=50M/50M name="1.SEMUA TRAFIK MASTERWIFI" priority=3/3 queue=\
+    pcq-upload-default/pcq-download-default target=\
+    192.168.5.0/24
+add max-limit=10M/10M name="6.TRAFICK SOSMED" packet-marks="FACEBOOK_DOWN,FACE\
+    BOOK_UP,TWITTER DOWN,TWITTER UP,INSTAGRAM DOWN,INSTAGRAM UP,TIKTOK_DOWN,TI\
+    KTOK_UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 queue=\
+    pcq-upload-default/pcq-download-default target=\
+    192.168.5.0/24
+add max-limit=10M/10M name="7.TRAFICK STREAM" packet-marks=\
+    "YOUTUBE DOWN,YOUTUBE UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 \
+    queue=pcq-upload-default/pcq-download-default target=\
+    192.168.5.0/24
+add max-limit=10M/10M name="5.TRAFICK CHAT" packet-marks=\
+    "WHATSAPP DOWN,WHATSAPP UP" parent="1.SEMUA TRAFIK MASTER" priority=3/3 \
+    queue=pcq-upload-default/pcq-download-default target=\
+    192.168.5.0/24
+add name=CLIENT parent="1.SEMUA TRAFIK MASTER" priority=5/5 queue=\
+    default/default target=192.168.5.0/24
 add name=A.LOKAL parent=CLIENT target=10.10.10.0/24
 add name=C.RUMAHAN parent=CLIENT target=30.30.30.0/24
 add name=B.HOTSPOT parent=CLIENT target=20.20.20.0/24
 add max-limit=10M/10M name="4.TRAFIK BROWSER" packet-marks="GOOGLE DOWN,GOOGLE\
     \_UP,BING DOWN,BING UP,YAHOO DOWN,YAHOO UP,YANDEX DOWN,YANDEX UP,DUCKDUCKG\
     O DOWN,DUCKDUCKGO UP,OLSHOP DOWN,OLSHOP UP" parent=\
-    "1.SEMUA TRAFIK MASTER" target=10.10.10.0/24,20.20.20.0/24
+    "1.SEMUA TRAFIK MASTER" target=192.168.5.0/24
 add max-limit=10M/10M name=2.GAME packet-marks="GAME DOWN,GAME UP" parent=\
     "1.SEMUA TRAFIK MASTER" priority=1/1 queue=default/default target=\
-    10.10.10.0/24,20.20.20.0/24
+    192.168.5.0/24
 add name=3.ICMP packet-marks="ICMP DOWN,ICMP UP" parent=\
     "1.SEMUA TRAFIK MASTER" priority=1/1 queue=default/default target=\
-    10.10.10.0/24,20.20.20.0/24
+    192.168.5.0/24
+
+/queue tree
+add max-limit=50M name="1.SEMUA DOWNLOAD" packet-mark="DOWNLOAD ALL" parent=\
+    global queue=pcq-download-default
+add max-limit=40M name="2.SEMUA UPLOAD" packet-mark="UPLUAD ALL" parent=\
+    global queue=pcq-download-default
+add max-limit=10M name="BROWSER DOWN" parent="1.SEMUA DOWNLOAD" queue=\
+    master-down
+add max-limit=10M name="BROWSER UP" parent="2.SEMUA UPLOAD" queue=\
+    master-upload
+add name=yahoo-down packet-mark="YAHOO DOWN" parent="BROWSER DOWN" queue=\
+    pcq-download-default
+add name=bing-down packet-mark="BING DOWN" parent="BROWSER DOWN" queue=\
+    pcq-download-default
+add name=yandex-down packet-mark="YANDEX DOWN" parent="BROWSER DOWN" queue=\
+    pcq-download-default
+add name=bing-up packet-mark="BING UP" parent="BROWSER UP" queue=\
+    pcq-upload-default
+add name=google-up packet-mark="GOOGLE UP" parent="BROWSER UP" queue=\
+    master-upload
+add name=yahoo-up packet-mark="YAHOO UP" parent="BROWSER UP" queue=\
+    pcq-upload-default
+add name=yandex-up packet-mark="YANDEX UP" parent="BROWSER UP" queue=\
+    pcq-upload-default
+add max-limit=10M name="GAME UP" packet-mark="GAME UP" parent=\
+    "2.SEMUA UPLOAD" priority=1 queue=pcq-upload-default
+add name="ICMP DOWN" packet-mark="ICMP DOWN" parent="1.SEMUA DOWNLOAD" \
+    priority=1 queue=pcq-download-default
+add name="ICMP UP" packet-mark="ICMP UP" parent="2.SEMUA UPLOAD" priority=1 \
+    queue=pcq-upload-default
+add max-limit=10M name="TRAFICK CHAT DOWN" parent="1.SEMUA DOWNLOAD" \
+    priority=2 queue=master-down
+add max-limit=10M name="TRAFICK CHAT UP" parent="2.SEMUA UPLOAD" priority=2 \
+    queue=master-upload
+add name="whatsapp down" packet-mark="WHATSAPP DOWN" parent=\
+    "TRAFICK CHAT DOWN" queue=pcq-download-default
+add name="whatsapp up" packet-mark="WHATSAPP UP" parent="TRAFICK CHAT UP" \
+    queue=pcq-upload-default
+add max-limit=10M name="TRAFICK STREAM DOWN" parent="1.SEMUA DOWNLOAD" \
+    priority=3 queue=master-down
+add max-limit=10M name="TRAFICK STREAM UP" parent="2.SEMUA UPLOAD" priority=3 \
+    queue=master-upload
+add max-limit=10M name="TRAFICK SOSMED DOWN" parent="1.SEMUA DOWNLOAD" \
+    priority=2 queue=master-down
+add max-limit=10M name="TRAFICK SOSMED UP" parent="2.SEMUA UPLOAD" priority=2 \
+    queue=master-upload
+add name="twitter down" packet-mark="TWITTER DOWN" parent=\
+    "TRAFICK SOSMED DOWN" queue=pcq-download-default
+add name="instagram down" packet-mark="INSTAGRAM DOWN" parent=\
+    "TRAFICK SOSMED DOWN" queue=pcq-download-default
+add name="instagram up" packet-mark="INSTAGRAM UP" parent="TRAFICK SOSMED UP" \
+    queue=pcq-upload-default
+add name="twitter up" packet-mark="TWITTER UP" parent="TRAFICK SOSMED UP" \
+    queue=pcq-upload-default
+add name="tiktok down" packet-mark=TIKTOK_DOWN parent="TRAFICK SOSMED DOWN" \
+    queue=master-down
+add name="tiktok up" packet-mark=TIKTOK_UP parent="TRAFICK SOSMED UP" queue=\
+    master-upload
+add name="youtube down" packet-mark="YOUTUBE DOWN" parent=\
+    "TRAFICK STREAM DOWN" queue=pcq-download-default
+add name="youtube up" packet-mark="YOUTUBE UP" parent="TRAFICK STREAM UP" \
+    queue=master-upload
+add name="facebook down" packet-mark=FACEBOOK_DOWN parent=\
+    "TRAFICK SOSMED DOWN" queue=master-down
+add name="facebook up" packet-mark=FACEBOOK_UP parent="TRAFICK SOSMED UP" \
+    priority=2 queue=master-upload
+add name="DNS DOWN" packet-mark="DNS DOWN" parent="1.SEMUA DOWNLOAD" queue=\
+    pcq-download-default
+add name="DNS UPLOAD" packet-mark="DNS UP" parent="2.SEMUA UPLOAD" queue=\
+    pcq-upload-default
+add name=google-down packet-mark="GOOGLE DOWN" parent="BROWSER DOWN" \
+    priority=1 queue=master-down
+add name=duckduckgo-down packet-mark="DUCKDUCKGO DOWN" parent="BROWSER DOWN" \
+    queue=pcq-download-default
+add name=duckduckgo-up packet-mark="DUCKDUCKGO UP" parent="BROWSER UP" queue=\
+    pcq-upload-default
+add name=online-shop-down packet-mark="OLSHOP DOWN" parent="BROWSER DOWN" \
+    queue=pcq-download-default
+add name=online-shop-upload packet-mark="OLSHOP UP" parent="BROWSER UP" \
+    queue=pcq-upload-default
+
+add max-limit=10M/10M name="4.TRAFIK BROWSER" packet-marks="GOOGLE DOWN,GOOGLE\
+    \_UP,BING DOWN,BING UP,YAHOO DOWN,YAHOO UP,YANDEX DOWN,YANDEX UP,DUCKDUCKG\
+    O DOWN,DUCKDUCKGO UP,OLSHOP DOWN,OLSHOP UP" parent=\
+    "1.SEMUA TRAFIK MASTER" target=192.168.5.0/24
+add max-limit=10M/10M name=2.GAME packet-marks="GAME DOWN,GAME UP" parent=\
+    "1.SEMUA TRAFIK MASTER" priority=1/1 queue=default/default target=\
+    192.168.5.0/24
+add name=3.ICMP packet-marks="ICMP DOWN,ICMP UP" parent=\
+    "1.SEMUA TRAFIK MASTER" priority=1/1 queue=default/default target=\
+    192.168.5.0/24
 
 /queue tree
 add max-limit=50M name="1.SEMUA DOWNLOAD" packet-mark="DOWNLOAD ALL" parent=\
