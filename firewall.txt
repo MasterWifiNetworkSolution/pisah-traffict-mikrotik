@@ -1,6 +1,5 @@
 /ip firewall address-list
-add address=10.10.10.0/24 list=lokal
-add address=20.20.20.0/24 list=lokal
+add address=192.168.5.0/24 list=lokal
 
 /ip firewall filter
 add action=passthrough chain=unused-hs-chain comment=\
@@ -29,17 +28,17 @@ add action=mark-connection chain=postrouting dst-address-list=yandex \
 add action=mark-connection chain=postrouting dst-address-list=duckduckgo \
     new-connection-mark=umum passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=facebook \
-    new-connection-mark=facebook passthrough=no
+    new-connection-mark=facebook passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=instagram \
-    new-connection-mark=instagram passthrough=no
+    new-connection-mark=instagram passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=twitter \
     new-connection-mark=umum passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=olshop \
-    new-connection-mark=olshop passthrough=no
+    new-connection-mark=olshop passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=lazada \
-    new-connection-mark=olshop passthrough=no
+    new-connection-mark=olshop passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=tiktok \
-    new-connection-mark=tiktok passthrough=no
+    new-connection-mark=tiktok passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=youtube \
     new-connection-mark=youtube passthrough=yes
 add action=mark-connection chain=postrouting dst-address-list=whatsapp \
@@ -109,39 +108,39 @@ add action=mark-packet chain=forward connection-mark=umum in-interface=\
 add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
     "SPEEDTEST UP" out-interface=1.ISP-1 passthrough=no
 add action=mark-routing chain=prerouting comment="MARK ROUTING" \
-    connection-mark=umum dst-address-list=google new-routing-mark=UMUM \
+    connection-mark=umum dst-address-list=google new-routing-mark=BROWSINGMASTER \
     passthrough=no
 add action=mark-routing chain=prerouting comment="MARK ROUTING" \
-    connection-mark=umum dst-address-list=umum new-routing-mark=UMUM \
+    connection-mark=umum dst-address-list=umum new-routing-mark=BROWSINGMASTER \
     passthrough=no
 add action=mark-routing chain=prerouting connection-mark=umum \
-    dst-address-list=bing new-routing-mark=UMUM passthrough=no
+    dst-address-list=bing new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=yahoo \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=yandex \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting connection-mark=umum \
-    dst-address-list=duckduckgo new-routing-mark=UMUM passthrough=no
+    dst-address-list=duckduckgo new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=facebook \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=instagram \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=whatsapp \
     new-routing-mark=DIRECT passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=game \
     new-routing-mark=DIRECT passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=speedtest \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=youtube \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=shopee \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=shopee \
-    new-routing-mark=UMUM passthrough=no
+    new-routing-mark=BROWSINGMASTER passthrough=no
 add action=mark-routing chain=prerouting dst-address-list=tiktok \
     new-routing-mark=DIRECT passthrough=no
 add action=mark-routing chain=output connection-mark=umum new-routing-mark=\
-    UMUM passthrough=no
+    BROWSINGMASTER passthrough=no
 add action=mark-routing chain=output connection-mark=direct new-routing-mark=\
     DIRECT passthrough=no
 add action=accept chain=prerouting comment=ACCEPT dst-address-list=lokal
@@ -152,9 +151,7 @@ add action=passthrough chain=unused-hs-chain comment=\
     "place hotspot rules here" disabled=yes
 add action=masquerade chain=srcnat out-interface=1.ISP-1
 add action=masquerade chain=srcnat comment="masquerade hotspot network" \
-    src-address=20.20.20.0/24
-add action=masquerade chain=srcnat comment="masquerade hotspot network" \
-    src-address=20.20.20.0/24
+    src-address=192.168.5.0/24
 
 /ip firewall raw
 add action=add-dst-to-address-list address-list=google address-list-timeout=\
@@ -389,6 +386,6 @@ add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
     chain=prerouting dst-address-list=game dst-port=42472,22101-22102 \
     protocol=udp src-address-list=lokal
 add action=add-dst-to-address-list address-list=umum address-list-timeout=1d \
-    chain=prerouting comment=UMUM dst-address-list=!game dst-port=\
+    chain=prerouting comment=BROWSINGMASTER dst-address-list=!game dst-port=\
     80-81,443,5222,8000-8081,21,22,23,81,88,5050,843,182,53 protocol=tcp \
     src-address-list=lokal
