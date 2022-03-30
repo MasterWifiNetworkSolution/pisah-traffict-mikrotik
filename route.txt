@@ -1,0 +1,7 @@
+/ip route
+add check-gateway=ping distance=1 gateway=192.168.4.1 routing-mark=DIRECT
+add check-gateway=ping distance=1 gateway=192.168.3.1 routing-mark=UMUM
+add check-gateway=ping distance=1 gateway=192.168.2.1 routing-mark=UMUM
+add check-gateway=ping distance=1 gateway=192.168.1.1 routing-mark=UMUM
+add check-gateway=ping distance=1 gateway=192.168.1.1
+add comment="proses koneksi" distance=1 gateway=192.168.1.1

@@ -1,0 +1,35 @@
+/interface bridge
+add comment="JALUR LAN" name="5.KONEKSI LAN"
+add disabled=yes name=bridge-wan
+
+/interface ethernet
+set [ find default-name=ether1 ] comment="KONEKSI WAN" name=1.ISP-1
+set [ find default-name=ether2 ] name=2.ISP-2
+set [ find default-name=ether3 ] disabled=yes name=3.ISP-3
+set [ find default-name=ether4 ] name=4.ISP-4
+set [ find default-name=ether5 ] name=5.LAN
+
+/interface l2tp-client
+add connect-to=l2tp-masterwifi.net ipsec-secret=masterwifi.net name=\
+    l2tp-masterwifi password=masterwifi use-ipsec=yes user=masterwifi
+
+/interface wireless
+set [ find default-name=wlan1 ] disabled=no name=4.ISP-BIASA ssid=DIRECT
+
+/interface list
+add name=WAN
+add name=LAN
+
+/interface wireless security-profiles
+set [ find default=yes ] authentication-types=wpa-psk,wpa2-psk group-ciphers=\
+    tkip,aes-ccm mode=dynamic-keys supplicant-identity=MikroTik \
+    unicast-ciphers=tkip,aes-ccm wpa-pre-shared-key=masterwifi \
+    wpa2-pre-shared-key=masterwifi
+
+/interface bridge port
+add bridge="KONEKSI LAN" interface=5.LAN
+add bridge="KONEKSI LAN" interface=wlan1
+
+/interface list member
+add interface=1.ISP-1 list=WAN
+add interface=5.LAN list=LAN

@@ -1,0 +1,21 @@
+/ip hotspot profile
+set [ find default=yes ] dns-name=masterwifi.net hotspot-address=20.20.20.1 \
+    html-directory=masterwifi login-by=http-chap,http-pap,mac-cookie
+add dns-name=masterwifi.net hotspot-address=20.20.20.1 html-directory=\
+    masterwifi login-by=http-chap,http-pap,mac-cookie name=hsprof2
+/ip hotspot
+add address-pool=hs-pool-HOTSPOT disabled=no interface="5.KONEKSI LAN" name=\
+    hotspot1 profile=hsprof2
+/ip hotspot user profile
+set [ find default=yes ] name=admin parent-queue=B.HOTSPOT shared-users=2
+add address-pool=hs-pool-HOTSPOT name=keluarga parent-queue=B.HOTSPOT \
+    rate-limit=5M/5M
+/ip hotspot ip-binding
+add address=20.20.20.9 mac-address=D0:67:E5:1E:EB:F4 to-address=20.20.20.9 \
+    type=bypassed
+/ip hotspot user
+add name=mama password=mama profile=keluarga
+add name=bini password=bini profile=keluarga
+add name=madan password=madan profile=keluarga
+add name=yusuf password=yusuf
+add name=inyun password=inyun profile=keluarga

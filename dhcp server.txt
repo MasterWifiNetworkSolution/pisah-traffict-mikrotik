@@ -1,0 +1,7 @@
+/ip dhcp-server
+add address-pool=hs-pool-HOTSPOT disabled=no interface="5.KONEKSI LAN" name=\
+    dhcp1
+
+/ip dhcp-server network
+add address=10.10.10.0/24 gateway=10.10.10.1 netmask=24
+add address=20.20.20.0/24 comment="hotspot network" gateway=20.20.20.1

@@ -1,0 +1,394 @@
+/ip firewall address-list
+add address=10.10.10.0/24 list=lokal
+add address=20.20.20.0/24 list=lokal
+
+/ip firewall filter
+add action=passthrough chain=unused-hs-chain comment=\
+    "place hotspot rules here" disabled=yes
+
+/ip firewall mangle
+add action=mark-connection chain=prerouting comment="MARK CONNECTION" \
+    new-connection-mark=ICMP passthrough=yes protocol=icmp src-address-list=\
+    lokal
+add action=mark-connection chain=prerouting dst-port=53 new-connection-mark=\
+    DNS passthrough=yes protocol=udp src-address-list=lokal
+add action=mark-connection chain=postrouting dst-address-list=umum \
+    new-connection-mark=umum passthrough=yes src-address-list=lokal
+add action=mark-connection chain=prerouting in-interface=1.ISP-1 \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=prerouting in-interface=1.ISP-1 \
+    new-connection-mark=direct passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=game \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=bing \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=yahoo \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=yandex \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=duckduckgo \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=facebook \
+    new-connection-mark=facebook passthrough=no
+add action=mark-connection chain=postrouting dst-address-list=instagram \
+    new-connection-mark=instagram passthrough=no
+add action=mark-connection chain=postrouting dst-address-list=twitter \
+    new-connection-mark=umum passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=olshop \
+    new-connection-mark=olshop passthrough=no
+add action=mark-connection chain=postrouting dst-address-list=lazada \
+    new-connection-mark=olshop passthrough=no
+add action=mark-connection chain=postrouting dst-address-list=tiktok \
+    new-connection-mark=tiktok passthrough=no
+add action=mark-connection chain=postrouting dst-address-list=youtube \
+    new-connection-mark=youtube passthrough=yes
+add action=mark-connection chain=postrouting dst-address-list=whatsapp \
+    new-connection-mark=whatsapp passthrough=yes src-address-list=lokal
+add action=mark-connection chain=postrouting dst-address-list=speedtest \
+    new-connection-mark=umum passthrough=yes
+add action=mark-packet chain=forward connection-mark=ICMP new-packet-mark=\
+    "ICMP DOWN" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=ICMP in-interface=\
+    1.ISP-1 new-packet-mark="ICMP UP" passthrough=no
+add action=mark-packet chain=forward connection-mark=ICMP new-packet-mark=\
+    "ICMP UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=DNS in-interface=\
+    1.ISP-1 new-packet-mark="DNS DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=DNS new-packet-mark=\
+    "DNS UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=direct in-interface=\
+    1.ISP-1 new-packet-mark="GAME DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=direct new-packet-mark=\
+    "GAME UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="GOOGLE DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "GOOGLE UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="BING DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "BING UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="YAHOO DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "YAHOO UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="YANDEX DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "YANDEX UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="DUCKDUCKGO DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "DUCKDUCKGO UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=facebook in-interface=\
+    1.ISP-1 new-packet-mark=FACEBOOK_DOWN passthrough=no
+add action=mark-packet chain=forward connection-mark=facebook \
+    new-packet-mark=FACEBOOK_UP out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=instagram in-interface=\
+    1.ISP-1 new-packet-mark="INSTAGRAM DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=instagram \
+    new-packet-mark="INSTAGRAM UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=tiktok in-interface=\
+    1.ISP-1 new-packet-mark=TIKTOK_DOWN passthrough=no
+add action=mark-packet chain=forward connection-mark=tiktok new-packet-mark=\
+    TIKTOK_UP out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=youtube in-interface=\
+    1.ISP-1 new-packet-mark="YOUTUBE DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=youtube new-packet-mark=\
+    "YOUTUBE UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=whatsapp in-interface=\
+    1.ISP-1 new-packet-mark="WHATSAPP DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=whatsapp \
+    new-packet-mark="WHATSAPP UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=olshop in-interface=\
+    1.ISP-1 new-packet-mark="OLSHOP DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=olshop new-packet-mark=\
+    "OLSHOP UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-packet chain=forward connection-mark=umum in-interface=\
+    1.ISP-1 new-packet-mark="SPEEDTEST DOWN" passthrough=no
+add action=mark-packet chain=forward connection-mark=umum new-packet-mark=\
+    "SPEEDTEST UP" out-interface=1.ISP-1 passthrough=no
+add action=mark-routing chain=prerouting comment="MARK ROUTING" \
+    connection-mark=umum dst-address-list=google new-routing-mark=UMUM \
+    passthrough=no
+add action=mark-routing chain=prerouting comment="MARK ROUTING" \
+    connection-mark=umum dst-address-list=umum new-routing-mark=UMUM \
+    passthrough=no
+add action=mark-routing chain=prerouting connection-mark=umum \
+    dst-address-list=bing new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=yahoo \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=yandex \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting connection-mark=umum \
+    dst-address-list=duckduckgo new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=facebook \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=instagram \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=whatsapp \
+    new-routing-mark=DIRECT passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=game \
+    new-routing-mark=DIRECT passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=speedtest \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=youtube \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=shopee \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=shopee \
+    new-routing-mark=UMUM passthrough=no
+add action=mark-routing chain=prerouting dst-address-list=tiktok \
+    new-routing-mark=DIRECT passthrough=no
+add action=mark-routing chain=output connection-mark=umum new-routing-mark=\
+    UMUM passthrough=no
+add action=mark-routing chain=output connection-mark=direct new-routing-mark=\
+    DIRECT passthrough=no
+add action=accept chain=prerouting comment=ACCEPT dst-address-list=lokal
+add action=accept chain=output dst-address-list=lokal
+
+/ip firewall nat
+add action=passthrough chain=unused-hs-chain comment=\
+    "place hotspot rules here" disabled=yes
+add action=masquerade chain=srcnat out-interface=1.ISP-1
+add action=masquerade chain=srcnat comment="masquerade hotspot network" \
+    src-address=20.20.20.0/24
+add action=masquerade chain=srcnat comment="masquerade hotspot network" \
+    src-address=20.20.20.0/24
+
+/ip firewall raw
+add action=add-dst-to-address-list address-list=google address-list-timeout=\
+    1h chain=prerouting comment="BROWSER MASTER" content=.google.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=google address-list-timeout=\
+    1h chain=prerouting content=.google.co.id dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=yahoo address-list-timeout=1h \
+    chain=prerouting content=.yahoo.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=yahoo address-list-timeout=1h \
+    chain=prerouting content=.yahoo.co.id dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=bing address-list-timeout=1h \
+    chain=prerouting content=.bing.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=yandex address-list-timeout=\
+    1h chain=prerouting content=.yandex.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=duckduckgo \
+    address-list-timeout=1h chain=prerouting content=.duckduckgo.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=youtube address-list-timeout=\
+    1h chain=prerouting comment="YOUTUBE MASTER" content=.youtube.com \
+    dst-address-list=youtube src-address-list=lokal
+add action=add-dst-to-address-list address-list=youtube address-list-timeout=\
+    1h chain=prerouting content=.ytimg.com dst-address-list=youtube \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=youtube address-list-timeout=\
+    1h chain=prerouting content=.googlevideo.com dst-address-list=youtube \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=youtube address-list-timeout=\
+    1h chain=prerouting content=.ggpht.com dst-address-list=youtube \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=youtube address-list-timeout=\
+    1h chain=prerouting content=.youtu.be dst-address-list=youtube \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=facebook \
+    address-list-timeout=1h chain=prerouting comment=\
+    "FACEBOOK & MESSENGER MASTER" content=.fb.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=facebook \
+    address-list-timeout=1h chain=prerouting content=.facebook.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=facebook \
+    address-list-timeout=1h chain=prerouting content=m.me dst-address-list=\
+    !lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=facebook \
+    address-list-timeout=1h chain=prerouting content=.facebook.net \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=facebook \
+    address-list-timeout=1h chain=prerouting content=.fbcdn.net \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=instagram \
+    address-list-timeout=1d chain=prerouting comment="INSTAGRAM MASTER" \
+    content=.cdninstagram.com dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=instagram \
+    address-list-timeout=1d chain=prerouting content=\
+    scontent-sin6-2.cdninstagram.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=instagram \
+    address-list-timeout=1d chain=prerouting content=.instagram.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=twitter address-list-timeout=\
+    1d chain=prerouting comment="TWITTER MASTER" content=twitter.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=twitter address-list-timeout=\
+    1d chain=prerouting content=.twimg.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=twitter address-list-timeout=\
+    1d chain=prerouting content=.twimg.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting comment="TIKTOK MASTER" content=.tiktokcdn.com \
+    dst-address-list=!tiktok src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=.byteoversea.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=byteoversea.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=.tiktok.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=.tiktokv.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=tiktok.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=ipstatp.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=tiktok address-list-timeout=\
+    1d chain=prerouting content=.muscdn.com dst-address-list=!tiktok \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting comment="ONLINE SHOP MASTER" content=.shopee.co.id \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.shopee.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.shopee.sg dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.lazada.co.id dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.lazada.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=shopee address-list-timeout=\
+    1d chain=prerouting content=.lazada.sg dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.tokopedia.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=olshop address-list-timeout=\
+    1d chain=prerouting content=.bukalapak.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=whatsapp \
+    address-list-timeout=1h chain=prerouting comment="WHATSAPP MASTER" \
+    content=.whatsapp.com dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=whatsapp \
+    address-list-timeout=1h chain=prerouting content=.whatsapp.net \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=telegram \
+    address-list-timeout=1d chain=prerouting comment="TELEGRAM MASTER" \
+    content=.telegram.org dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=telegram \
+    address-list-timeout=1d chain=prerouting content=telegram.org \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=speedtest \
+    address-list-timeout=1d chain=prerouting comment="SPEEDTEST MASTER" \
+    content=speedtest.net dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=speedtest \
+    address-list-timeout=1d chain=prerouting content=speedtest.cbn.id \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=speedtest \
+    address-list-timeout=1d chain=prerouting content=fast.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="FREE FIRE MASTER" content=a.akamaihd.net \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting content=garena.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting content=freefiremobile.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    7006,14000,20561,39698,39779,39003 protocol=tcp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=7008,10000-10009,17000 \
+    protocol=udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="PUBG MASTER" content=krafton.com \
+    dst-address-list=!lokal src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting content=igamecj.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting content=amsoveasea.com dst-address-list=!lokal \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=7889,10012,17500,18081 \
+    protocol=tcp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    8011,9030,10010-10650,11000-14000,17000,20000,20001,20002,20371 protocol=\
+    udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="MOBILE LEGENDS MASTER" dst-address-list=!lokal \
+    dst-port=5500-5700,8001,30000-30300,9000-9010 protocol=tcp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    30097-30147,30000-30150,9001,30101-30105,5057,5228,5001-5009 protocol=tcp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    5000-5200,5500-5700,8001,30000-30300,9000-9010 protocol=udp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    5601-5602,5025,5605,5005,5503,5101-5109,5001-5009,30101 protocol=udp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    5520-5529,5020-5024,5501-5509,5517 protocol=udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="EFOOTBALL 2021 PES MASTER" dst-address-list=\
+    !lokal dst-port=27015-27030,27036-27037 protocol=tcp src-address-list=\
+    lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    4380,5730-5731,5739,27000-27031,27036 protocol=udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="APEX LEGENDS MASTER" dst-address-list=!lokal \
+    dst-port=1024-1124,18000,29900,37000-40000 protocol=udp src-address-list=\
+    lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    1024-1124,3216,9960-9969,18000,18060,18120,27900,28910,29900 protocol=tcp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="COD MASTER" dst-address-list=!lokal dst-port=\
+    3013,10000-10019,18082,50000,65010,65050 protocol=tcp src-address-list=\
+    lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    7085-7995,8700,9030,10010-10019,17000-20100 protocol=udp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="COC MASTER" dst-address-list=!lokal dst-port=\
+    9330-9340 protocol=tcp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=9330-9340 protocol=udp \
+    src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="AOV MASTER" dst-address-list=!lokal dst-port=\
+    10001-10094 protocol=tcp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=!lokal dst-port=\
+    10101-10201,10080-10110,17000-18000 protocol=udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting comment="GENSHIN IMPACT MASTER" dst-address-list=game \
+    dst-port=42472 protocol=tcp src-address-list=lokal
+add action=add-dst-to-address-list address-list=game address-list-timeout=1d \
+    chain=prerouting dst-address-list=game dst-port=42472,22101-22102 \
+    protocol=udp src-address-list=lokal
+add action=add-dst-to-address-list address-list=umum address-list-timeout=1d \
+    chain=prerouting comment=UMUM dst-address-list=!game dst-port=\
+    80-81,443,5222,8000-8081,21,22,23,81,88,5050,843,182,53 protocol=tcp \
+    src-address-list=lokal
